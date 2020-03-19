@@ -1,3 +1,22 @@
 ion-content ion-toolbar {
   --background: translucent;
 }
+
+ion-toolbar {
+  margin: 1rem 0;
+}
+
+ion-title {
+  font-size: 1.5rem;
+}
+
+ion-button {
+  font-size: 1.1rem;
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+}
+
+.attendence-row .item-native {
+  display: flex;
+  justify-items: space-between;
+}
