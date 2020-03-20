@@ -1,5 +1,5 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "be.ap.attend",
   "appName": "attend",
   "bundledWebRuntime": false,
   "npmClient": "npm",

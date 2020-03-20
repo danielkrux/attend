@@ -1,22 +1,29 @@
-import React from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import React, { useEffect, useState } from 'react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonLoading } from '@ionic/react';
 import './map.css';
+import AttendeesMap from '../../components/attendeesMap';
+import { getItems } from '../../util/storage';
 
 const Map: React.FC = () => {
-  const name = 'Map'
+  const [attendees, setAttendees] = useState<any>([]);
+
+  useEffect(() => {
+    const getAttendees = async () => {
+      setAttendees(await getItems('attend'));
+    }
+    getAttendees();
+  }, [])
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>{name}</IonTitle>
+          <IonTitle>Map</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">{name}</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+        <IonLoading isOpen={!(attendees && attendees.length > 0)} />
+        {(attendees && attendees.length > 0) && <AttendeesMap attendees={attendees} />}
       </IonContent>
     </IonPage>
   );

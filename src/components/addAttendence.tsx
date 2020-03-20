@@ -1,20 +1,36 @@
+import { Plugins } from '@capacitor/core';
 import React, { useState, useRef } from 'react';
-import { IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonContent, IonLabel, IonInput, IonItem, IonList } from '@ionic/react';
-// eslint-disable-next-line
-import { setItem, clear } from "../util/storage";
+import { IonButton, IonContent, IonLabel, IonInput, IonItem, IonList, IonLoading } from '@ionic/react';
 import CanvasDraw from 'react-canvas-draw';
+import { setItem } from "../util/storage";
+import { getAdress } from '../util/httpClient';
 
-export interface AddAttendenceProps {
-  handleModalClose: () => void;
-}
+const { Geolocation } = Plugins;
 
-const AddAttendence: React.SFC<AddAttendenceProps> = ({ handleModalClose }) => {
+export interface AddAttendenceProps { }
+
+const AddAttendence: React.SFC<AddAttendenceProps> = ({ }) => {
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const canvas = useRef<any>(null);
 
+  async function getCurrentPosition() {
+    let result
+    try {
+      result = await Geolocation.getCurrentPosition();
+    }
+    catch (error) {
+      console.log(error);
+    }
+    return result;
+  }
+
   const submit = async () => {
+    setIsLoading(true)
+    let currentPositionResult = await getCurrentPosition();
+    let adressApiResult = await getAdress(currentPositionResult?.coords.latitude, currentPositionResult?.coords.longitude)
     const id = `attend-${(Math.random() * 100).toFixed()}`;
     const canvasData = canvas.current.getSaveData();
     const dateTime = new Date().toISOString();
@@ -23,20 +39,22 @@ const AddAttendence: React.SFC<AddAttendenceProps> = ({ handleModalClose }) => {
       lastname,
       signature: canvasData,
       submittedAt: dateTime,
+      location: {
+        lat: currentPositionResult?.coords.latitude,
+        lon: currentPositionResult?.coords.longitude,
+        adress: adressApiResult.results[0].formatted
+      }
     }
-    setItem(id, attendence)
+    setFirstname('')
+    setLastname('')
+    canvas.current.clear();
+    await setItem(id, attendence)
+    setIsLoading(false)
   }
 
   return (
     <>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle size="large">Add attendence</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={() => handleModalClose()}>Close</IonButton>
-          </IonButtons>
-        </IonToolbar>
-      </IonHeader>
+      <IonLoading isOpen={isLoading} spinner="dots" />
       <IonContent>
         <form onSubmit={e => {
           e.preventDefault();
@@ -53,12 +71,15 @@ const AddAttendence: React.SFC<AddAttendenceProps> = ({ handleModalClose }) => {
             </IonItem>
             <IonItem>
               <CanvasDraw
+                style={{height: '250px', width: '400px'}}
                 brushColor={"#000"}
                 canvasHeight={250}
                 canvasWidth={400}
                 brushRadius={2}
                 lazyRadius={0}
                 ref={canvas}
+                loadTimeOffset={10}
+                saveData={''}
               />
             </IonItem>
           </IonList>

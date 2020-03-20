@@ -1,3 +1,19 @@
 ion-content ion-toolbar {
   --background: translucent;
 }
+
+ion-toolbar {
+  margin-bottom: 0;
+}
+
+.marker {
+  padding: 0.5rem;
+  background-color: #3880ff;
+  color: #fff;
+  border-radius: 0 2rem 2rem 2rem;
+  width: fit-content;
+}
+
+.marker:hover, .marker:focus{
+  z-index: 1;
+}

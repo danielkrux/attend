@@ -38,7 +38,7 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
-        <IonRouterOutlet>
+        <IonRouterOutlet animated={true}>
           <Route path="/attendees" component={Attendees} exact={true} />
           <Route path="/map" component={Map} exact={true} />
           <Route path="/admin" component={Admin} />
