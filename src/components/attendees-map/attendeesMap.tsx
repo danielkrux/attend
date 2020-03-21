@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
-import { median } from '../util/helpers';
+import { median } from '../../util/helpers';
+import './attendeesMap.css';
 
 export interface AttendeesMapProps {
   attendees?: []

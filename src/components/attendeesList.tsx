@@ -1,23 +1,12 @@
 import { IonList, IonItem, IonLabel } from "@ionic/react";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import CanvasDraw from "react-canvas-draw";
-import { getItems } from "../util/storage";
 
 export interface AttendeesListProps {
-  isAdding: boolean;
-  clearedList: boolean;
+  attendees: any[];
 }
 
-const AttendeesList: React.SFC<AttendeesListProps> = ({ isAdding, clearedList }) => {
-  const [attendees, setAttendees] = useState<any>([]);
-
-  useEffect(() => {
-    const getAttendees = async () => {
-      setAttendees(await getItems('attend'));
-    }
-    getAttendees();
-  }, [isAdding, clearedList])
-
+const AttendeesList: React.SFC<AttendeesListProps> = ({ attendees }) => {
   return (
     <IonList>
       {attendees.map((a: any, i: number) => {

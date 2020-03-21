@@ -10,9 +10,8 @@ import {
   IonTabs
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { person, map, lockClosed } from 'ionicons/icons';
+import { person, lockClosed } from 'ionicons/icons';
 import Attendees from './pages/Attendees/attendees';
-import Map from './pages/Map/map';
 import Admin from './pages/Admin/admin';
 
 /* Core CSS required for Ionic components to work properly */
@@ -38,20 +37,15 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
-        <IonRouterOutlet animated={true}>
+        <IonRouterOutlet >
           <Route path="/attendees" component={Attendees} exact={true} />
-          <Route path="/map" component={Map} exact={true} />
-          <Route path="/admin" component={Admin} />
+          <Route path="/admin" component={Admin} exact={true} />
           <Route path="/" render={() => <Redirect to="attendees" />} exact={true} />
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
           <IonTabButton tab="attendees" href="/attendees">
             <IonIcon icon={person} />
             <IonLabel>Attendees</IonLabel>
-          </IonTabButton>
-          <IonTabButton tab="map" href="/map">
-            <IonIcon icon={map} />
-            <IonLabel>Map</IonLabel>
           </IonTabButton>
           <IonTabButton tab="admin" href="/admin">
             <IonIcon icon={lockClosed} />

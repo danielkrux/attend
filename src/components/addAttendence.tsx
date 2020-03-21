@@ -1,22 +1,29 @@
 import { Plugins } from '@capacitor/core';
 import React, { useState, useRef } from 'react';
-import { IonButton, IonContent, IonLabel, IonInput, IonItem, IonList, IonLoading } from '@ionic/react';
+import { IonButton, IonContent, IonLabel, IonInput, IonItem, IonList, IonLoading, IonIcon, IonModal } from '@ionic/react';
+import { qrCodeOutline } from 'ionicons/icons';
 import CanvasDraw from 'react-canvas-draw';
+
 import { setItem } from "../util/storage";
 import { getAdress } from '../util/httpClient';
+import QRScannerModal from './attendees-map/qrScannerModal';
 
 const { Geolocation } = Plugins;
 
 export interface AddAttendenceProps { }
 
-const AddAttendence: React.SFC<AddAttendenceProps> = ({ }) => {
+const AddAttendence: React.SFC<AddAttendenceProps> = () => {
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
+
+  const [qrModal, setQRModal] = useState(false)
+  const [qrScanSucces, setQRScanSucess] = useState(false)
+
   const [isLoading, setIsLoading] = useState(false)
 
   const canvas = useRef<any>(null);
 
-  async function getCurrentPosition() {
+  const getCurrentPosition = async () => {
     let result
     try {
       result = await Geolocation.getCurrentPosition();
@@ -52,8 +59,14 @@ const AddAttendence: React.SFC<AddAttendenceProps> = ({ }) => {
     setIsLoading(false)
   }
 
+  const handleQRSucces = () => {
+    setQRScanSucess(true)
+    setQRModal(false)
+  }
+
   return (
     <>
+      <QRScannerModal handleDismiss={() => setQRModal(false)} isOpen={qrModal} handleSuccess={() => handleQRSucces()} />
       <IonLoading isOpen={isLoading} spinner="dots" />
       <IonContent>
         <form onSubmit={e => {
@@ -71,7 +84,7 @@ const AddAttendence: React.SFC<AddAttendenceProps> = ({ }) => {
             </IonItem>
             <IonItem>
               <CanvasDraw
-                style={{height: '250px', width: '400px'}}
+                style={{ height: '250px', width: '400px' }}
                 brushColor={"#000"}
                 canvasHeight={250}
                 canvasWidth={400}
@@ -83,7 +96,16 @@ const AddAttendence: React.SFC<AddAttendenceProps> = ({ }) => {
               />
             </IonItem>
           </IonList>
-          <IonButton type='submit'>Submit</IonButton>
+          {
+            qrScanSucces ?
+              <span style={{ color: 'green' }}>QR Code Scanned</span>
+              :
+              <IonButton size="small" color="light" onClick={() => { setQRModal(true) }}><IonIcon icon={qrCodeOutline} />&nbsp;Scan QR Code</IonButton>
+          }
+          <IonButton size="small" color="light" onClick={() => { canvas.current.clear() }}>Clear signture</IonButton>
+          <div>
+            <IonButton size="small" type='submit' disabled={!qrScanSucces}>Submit</IonButton>
+          </div>
         </form>
       </IonContent>
     </>

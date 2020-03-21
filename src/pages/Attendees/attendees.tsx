@@ -8,7 +8,7 @@ const Attendees: React.FC = () => {
     <IonPage>
       <IonHeader translucent>
         <IonToolbar>
-          <IonTitle size="large">Add Attendence</IonTitle>
+          <IonTitle size="large">Add Your Presence</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
