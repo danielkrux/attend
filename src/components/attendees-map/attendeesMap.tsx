@@ -57,7 +57,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
               key={i}
               lat={a.location.lat}
               lng={a.location.lon}
-              name={`${a.firstname} ${a.location.lat} ${a.location.lon}`}
+              name={`${a.firstname}`}
             />
           )
         })

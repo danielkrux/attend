@@ -65,8 +65,8 @@ const Admin: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       {isAuth ?
-        < IonContent>
-          < IonCard style={{ padding: '1rem' }}>
+        <IonContent>
+          <IonCard style={{ padding: '1rem' }}>
             <h3>Login</h3>
             <p>Enter password to proceed</p>
             <IonItem>

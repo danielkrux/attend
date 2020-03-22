@@ -13,6 +13,7 @@ const { Geolocation } = Plugins;
 export interface AddAttendenceProps { }
 
 const AddAttendence: React.SFC<AddAttendenceProps> = () => {
+  //set state for various variables we need
   const [firstname, setFirstname] = useState('')
   const [lastname, setLastname] = useState('')
 
@@ -23,6 +24,7 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
 
   const [signatureKey, setSignatureKey] = useState(0)
 
+  //get the reference to the canvasdraw component to clear or save the signature
   const canvas = useRef<any>(null);
 
   useIonViewDidLeave(() => {
