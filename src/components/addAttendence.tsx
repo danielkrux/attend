@@ -6,7 +6,7 @@ import CanvasDraw from 'react-canvas-draw';
 
 import { setItem } from "../util/storage";
 import { getAdress } from '../util/httpClient';
-import QRScannerModal from './attendees-map/qrScannerModal';
+import QRScannerModal from './qr-scanner/qrScannerModal';
 
 const { Geolocation } = Plugins;
 
@@ -124,7 +124,7 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
               :
               <IonButton size="small" color="light" onClick={() => { setQRModal(true) }}><IonIcon icon={qrCodeOutline} />&nbsp;Scan QR Code</IonButton>
           }
-          <IonButton size="small" color="light" onClick={() => { canvas.current.clear() }}>Clear signture</IonButton>
+          <IonButton size="small" color="light" onClick={() => { canvas.current.clear() }}>Clear signature</IonButton>
           <div>
             {/* disable the submit button aslong as the user has not succesfully filled out the form */}
             <IonButton size="small" type='submit' disabled={formInvalid}>Submit</IonButton>

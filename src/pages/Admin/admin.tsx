@@ -13,7 +13,8 @@ import {
   IonItem,
   IonInput,
   IonCard,
-  useIonViewWillEnter
+  useIonViewWillEnter,
+  useIonViewDidLeave
 } from '@ionic/react';
 import './admin.css';
 import AttendeesList from '../../components/attendeesList';
@@ -33,6 +34,10 @@ const Admin: React.FC = () => {
       setAttendees(await getItems('attend'));
     }
     getAttendees();
+  })
+
+  useIonViewDidLeave(() => {
+    setPassword('')
   })
 
   const isAuth = passwordInput !== PASSWORD;
