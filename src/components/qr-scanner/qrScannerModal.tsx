@@ -15,6 +15,7 @@ const QRScannerModal: React.SFC<QRScannerModalProps> = ({ isOpen, handleDismiss,
   const PASSPHRASE = 'Presence detected!'
   const [scanSuccess, setScanSuccess] = useState(false);
 
+  //if the platform is native, use a cordova plugin to scan the QR code
   useEffect(() => {
     if (isPlatform('capacitor') && isOpen && !scanSuccess) {
       window.cordova.plugins.barcodeScanner.scan(

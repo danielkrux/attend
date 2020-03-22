@@ -13,7 +13,8 @@ export const setItem = async (key: string, value: any) => {
 };
 
 export const getItem = async (key: string) => {
-  return await Storage.get({ key });
+  const result = await Storage.get({ key });
+  return result.value === null ? undefined : JSON.parse(result.value)
 };
 
 export const getItems = async (keyFragment: string): Promise<any[]> => {

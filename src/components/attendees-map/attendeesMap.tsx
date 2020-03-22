@@ -19,7 +19,7 @@ const Marker: React.SFC<MarkerProps> = ({ name }) => <div className="marker">{na
 const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
 
   const [center, setCenter] = useState({ lat: 51.3, lng: 4.9 });
-  const [zoom, setZoom] = useState(6);
+  const [zoom, setZoom] = useState(10);
 
   useIonViewDidEnter(() => {
     const calculateCenter = () => {
@@ -50,8 +50,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
           zoomControl: true
         }}
       >
-        {
-        attendees?.map((a: any, i: number) => {
+        {attendees?.map((a: any, i: number) => {
           return (
             <Marker
               key={i}
@@ -60,8 +59,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
               name={`${a.firstname}`}
             />
           )
-        })
-        }
+        })}
       </GoogleMapReact>
     </div>
   );
