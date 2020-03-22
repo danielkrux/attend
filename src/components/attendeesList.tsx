@@ -18,7 +18,6 @@ const AttendeesList: React.SFC<AttendeesListProps> = ({ attendees }) => {
             <IonLabel>
               <h2>{a.firstname}&nbsp;{a.lastname}</h2>
               <p>{DATE}&nbsp;{TIME}</p>
-              {/* <p>{a.location.lat},&nbsp;{a.location.lon}</p> */}
               <p>{a.location.adress}</p>
             </IonLabel>
             {(attendees && a && a.signature) && <CanvasDraw

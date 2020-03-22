@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GoogleMapReact from 'google-map-react';
 import { median } from '../../util/helpers';
 import './attendeesMap.css';
+import { useIonViewDidEnter } from '@ionic/react';
 
 export interface AttendeesMapProps {
   attendees?: []
@@ -20,7 +21,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
   const [center, setCenter] = useState({ lat: 51.3, lng: 4.9 });
   const [zoom, setZoom] = useState(6);
 
-  useEffect(() => {
+  useIonViewDidEnter(() => {
     const calculateCenter = () => {
       let latMedian;
       let lngMedian;
@@ -33,7 +34,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
       setCenter({ lat: latMedian, lng: lngMedian })
     }
     calculateCenter()
-  }, [attendees])
+  })
 
 
   return (
@@ -49,16 +50,18 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
           zoomControl: true
         }}
       >
-        {attendees?.map((a: any, i: number) => {
+        {
+        attendees?.map((a: any, i: number) => {
           return (
             <Marker
               key={i}
               lat={a.location.lat}
               lng={a.location.lon}
-              name={a.firstname}
+              name={`${a.firstname} ${a.location.lat} ${a.location.lon}`}
             />
           )
-        })}
+        })
+        }
       </GoogleMapReact>
     </div>
   );

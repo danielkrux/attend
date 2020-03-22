@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  IonContent, 
-  IonHeader, 
-  IonPage, 
-  IonTitle, 
-  IonToolbar, 
-  IonButtons, 
-  IonButton, 
-  IonSegment, 
-  IonSegmentButton, 
-  IonLabel, 
-  IonModal, 
-  IonItem, 
-  IonInput
- } from '@ionic/react';
+import React, { useState } from 'react';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonSegment,
+  IonSegmentButton,
+  IonLabel,
+  IonItem,
+  IonInput,
+  IonCard,
+  useIonViewWillEnter
+} from '@ionic/react';
 import './admin.css';
 import AttendeesList from '../../components/attendeesList';
 import AttendeesMap from '../../components/attendees-map/attendeesMap';
@@ -27,51 +28,64 @@ const Admin: React.FC = () => {
 
   const PASSWORD = 'test'
 
-  useEffect(() => {
+  useIonViewWillEnter(() => {
     const getAttendees = async () => {
       setAttendees(await getItems('attend'));
     }
     getAttendees();
-  }, [clearedList])
+  })
 
+  const isAuth = passwordInput !== PASSWORD;
+  const emptyList = attendees.length === 0;
   return (
     <IonPage>
-      <IonModal animated={false} isOpen={passwordInput !== PASSWORD}>
-        <IonContent className='auth-modal'>
-          <h3>Login</h3>
-          <p>Enter password to proceed</p>
-          <IonItem>
-            <IonLabel position="floating">Password</IonLabel>
-            <IonInput type="password" value={passwordInput} onInput={(e: any) => setPassword((e.target.value))} />
-          </IonItem>
-        </IonContent>
-      </IonModal>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Admin</IonTitle>
-          <IonButtons slot="end">
-            <IonButton onClick={() => { clear(); setClearedList(true) }}>Clear</IonButton>
-          </IonButtons>
+          {!isAuth && <IonButtons slot="end">
+            <IonButton
+              onClick={async () => {
+                await clear();
+                setAttendees([]);
+                setClearedList(true)
+              }}
+              disabled={emptyList}
+            >Clear</IonButton>
+          </IonButtons>}
         </IonToolbar>
         <IonToolbar>
-          <IonSegment value={activeSegment} onIonChange={e => setActiveSegment(e.detail.value!)}>
+          {!isAuth && <IonSegment value={activeSegment} onIonChange={e => setActiveSegment(e.detail.value!)}>
             <IonSegmentButton value="list">
               <IonLabel>List</IonLabel>
             </IonSegmentButton>
             <IonSegmentButton value="map">
               <IonLabel>Map</IonLabel>
             </IonSegmentButton>
-          </IonSegment>
+          </IonSegment>}
         </IonToolbar>
       </IonHeader>
-      <IonContent>
-        {activeSegment === 'list' ?
-          <AttendeesList attendees={attendees} />
-          :
-          (attendees && attendees.length > 0) && <AttendeesMap attendees={attendees} />
-        }
-      </IonContent>
-    </IonPage>
+      {isAuth ?
+        < IonContent>
+          < IonCard style={{ padding: '1rem' }}>
+            <h3>Login</h3>
+            <p>Enter password to proceed</p>
+            <IonItem>
+              <IonLabel position="floating">Password</IonLabel>
+              <IonInput type="password" value={passwordInput} onInput={(e: any) => setPassword((e.target.value))} />
+            </IonItem>
+          </IonCard>
+        </IonContent>
+        :
+        <IonContent>
+          {activeSegment === 'list' ?
+            <AttendeesList attendees={attendees} />
+            :
+            (attendees && attendees.length > 0) && <AttendeesMap attendees={attendees} />
+          }
+        </IonContent>
+
+      }
+    </IonPage >
   );
 };
 

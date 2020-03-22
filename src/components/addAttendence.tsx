@@ -1,6 +1,6 @@
 import { Plugins } from '@capacitor/core';
 import React, { useState, useRef } from 'react';
-import { IonButton, IonContent, IonLabel, IonInput, IonItem, IonList, IonLoading, IonIcon, IonModal } from '@ionic/react';
+import { IonButton, IonContent, IonLabel, IonInput, IonItem, IonList, IonLoading, IonIcon, useIonViewDidLeave } from '@ionic/react';
 import { qrCodeOutline } from 'ionicons/icons';
 import CanvasDraw from 'react-canvas-draw';
 
@@ -21,8 +21,16 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
+  const [signatureKey, setSignatureKey] = useState(0)
+
   const canvas = useRef<any>(null);
 
+  useIonViewDidLeave(() => {
+    //For some reason, the 'canvasdraw' will be unuseable without refreshing it's key to something random on leaving the page
+    setSignatureKey(Math.random()) 
+  })
+
+  //Get the current position of the user on submitting the form
   const getCurrentPosition = async () => {
     let result
     try {
@@ -35,11 +43,16 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
   }
 
   const submit = async () => {
+    //show the loading indicator
     setIsLoading(true)
     let currentPositionResult = await getCurrentPosition();
+    //call the adress api with the received coordinates
     let adressApiResult = await getAdress(currentPositionResult?.coords.latitude, currentPositionResult?.coords.longitude)
+    //get a random ID
     const id = `attend-${(Math.random() * 100).toFixed()}`;
+    //get the signature from the canvasdraw component using the 'useRef' hook in line 26
     const canvasData = canvas.current.getSaveData();
+    //save the date and time
     const dateTime = new Date().toISOString();
     const attendence = {
       firstname,
@@ -52,18 +65,24 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
         adress: adressApiResult.results[0].formatted
       }
     }
+    //reset the form
+    setQRScanSucess(false)
     setFirstname('')
     setLastname('')
     canvas.current.clear();
+    //save the item to localstorage / sharedPreferences
     await setItem(id, attendence)
     setIsLoading(false)
   }
 
+  //handle the success callback of the qrReader component by setting the qrScanSucess to true and closing the modal
   const handleQRSucces = () => {
     setQRScanSucess(true)
     setQRModal(false)
   }
 
+  const formInvalid = !qrScanSucces || firstname.length === 0 || lastname.length === 0
+  
   return (
     <>
       <QRScannerModal handleDismiss={() => setQRModal(false)} isOpen={qrModal} handleSuccess={() => handleQRSucces()} />
@@ -84,6 +103,7 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
             </IonItem>
             <IonItem>
               <CanvasDraw
+                key={signatureKey}
                 style={{ height: '250px', width: '400px' }}
                 brushColor={"#000"}
                 canvasHeight={250}
@@ -98,13 +118,14 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
           </IonList>
           {
             qrScanSucces ?
-              <span style={{ color: 'green' }}>QR Code Scanned</span>
+              <span style={{ color: 'green', marginLeft: '1rem' }}>QR Code Scanned</span>
               :
               <IonButton size="small" color="light" onClick={() => { setQRModal(true) }}><IonIcon icon={qrCodeOutline} />&nbsp;Scan QR Code</IonButton>
           }
           <IonButton size="small" color="light" onClick={() => { canvas.current.clear() }}>Clear signture</IonButton>
           <div>
-            <IonButton size="small" type='submit' disabled={!qrScanSucces}>Submit</IonButton>
+            {/* disable the submit button aslong as the user has not succesfully filled out the form */}
+            <IonButton size="small" type='submit' disabled={formInvalid}>Submit</IonButton>
           </div>
         </form>
       </IonContent>
