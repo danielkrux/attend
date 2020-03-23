@@ -9,6 +9,6 @@ export async function getAdress(
   longitude: number | undefined
 ) {
   return await get<any>(
-    `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=d8eeab056fdf4aa59d4b89cff3485935`
+    `https://api.opencagedata.com/geocode/v1/json?q=${latitude}+${longitude}&key=${process.env.REACT_APP_ADRESS_API_KEY}`
   );
 }

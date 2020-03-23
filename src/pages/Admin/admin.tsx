@@ -26,7 +26,7 @@ const Admin: React.FC = () => {
   const [clearedList, setClearedList] = useState(false);
   const [activeSegment, setActiveSegment] = useState('list')
   const [attendees, setAttendees] = useState<any>([]);
-  const [passwordInput, setPassword] = useState('');
+  const [passwordInput, setPassword] = useState('BlijfInUwKot');
   const [useQrScanner, setUseQrScanner] = useState(false)
 
   //get the data out of localstorage / sharedPreferences on page load

@@ -41,7 +41,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
   return (
     <div style={{ height: '95%', width: '100%' }}>
       <GoogleMapReact
-        bootstrapURLKeys={{ key: 'AIzaSyDgMROM_H8cvr9WZ-0gU1D53yC-C74D4wM' }}
+        bootstrapURLKeys={{ key: process.env.REACT_APP_GMAP_KEY! }}
         defaultCenter={center}
         defaultZoom={zoom}
         draggable

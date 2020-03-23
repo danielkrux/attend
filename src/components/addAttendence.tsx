@@ -73,7 +73,7 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
       location: {
         lat: currentPositionResult?.coords.latitude,
         lon: currentPositionResult?.coords.longitude,
-        adress: adressApiResult?.results[0].formatted
+        adress: adressApiResult?.results[0]?.formatted
       },
       scannedQRCode: qrScanSucces
     }
