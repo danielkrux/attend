@@ -21,6 +21,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
   const [center, setCenter] = useState({ lat: 51.3, lng: 4.9 });
   const [zoom, setZoom] = useState(10);
 
+  //Always show the median of all the coords on the map
   useIonViewDidEnter(() => {
     const calculateCenter = () => {
       let latMedian;
@@ -38,7 +39,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
 
 
   return (
-    <div style={{ height: '100%', width: '100%' }}>
+    <div style={{ height: '95%', width: '100%' }}>
       <GoogleMapReact
         bootstrapURLKeys={{ key: 'AIzaSyDgMROM_H8cvr9WZ-0gU1D53yC-C74D4wM' }}
         defaultCenter={center}
