@@ -3,7 +3,7 @@ An app that can keep track of users presence.
 There are two ways to submit a presence: with a QR Code and with a geolocation. 
 
 ## 1. Serve the app
-Browser: `ionic serve`
+Browser: `ionic serve` </br>
 Andoird emulator: `ionic cap run android -l --external`
 
 ## 2. Register your presence
