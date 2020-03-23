@@ -19,6 +19,7 @@ const AttendeesList: React.SFC<AttendeesListProps> = ({ attendees }) => {
               <h2>{a.firstname}&nbsp;{a.lastname}</h2>
               <p>{DATE}&nbsp;{TIME}</p>
               <p>{a.location.adress}</p>
+              {a.scannedQRCode && <p style={{color: 'green'}}>QR Code Scanned</p>}
             </IonLabel>
             {(attendees && a && a.signature) && <CanvasDraw
               style={{ marginBottom: '.5rem', height: '100px', width: '100px' }}

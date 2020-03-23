@@ -38,10 +38,10 @@ const Admin: React.FC = () => {
     getData();
   })
 
-  //set the password saved from the input field to an empty string so the user needs to login again when navigating to this page
-  // useIonViewDidLeave(() => {
-  //   setPassword('')
-  // })
+  // set the password saved from the input field to an empty string so the user needs to login again when navigating to this page
+  useIonViewDidLeave(() => {
+    setPassword('')
+  })
 
   const PASSWORD = 'BlijfInUwKot'
   const isAuth = passwordInput !== PASSWORD;

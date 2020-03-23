@@ -52,7 +52,7 @@ const AttendeesMap: React.SFC<AttendeesMapProps> = ({ attendees }) => {
       >
         {attendees?.map((a: any, i: number) => {
           return (
-            <Marker
+            (a.location.lat && a.location.lon) && <Marker
               key={i}
               lat={a.location.lat}
               lng={a.location.lon}

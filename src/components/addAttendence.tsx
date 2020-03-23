@@ -6,7 +6,7 @@ import CanvasDraw from 'react-canvas-draw';
 
 import { setItem, getItem } from "../util/storage";
 import { getAdress } from '../util/httpClient';
-import QRScannerModal from './qr-scanner/qrScannerModal';
+import QRScannerModal from './qrScannerModal';
 
 const { Geolocation } = Plugins;
 
@@ -50,11 +50,15 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
   }
 
   const submit = async () => {
+    let currentPositionResult;
+    let adressApiResult;
     //show the loading indicator
     setIsLoading(true)
-    let currentPositionResult = await getCurrentPosition();
-    //call the adress api with the received coordinates
-    let adressApiResult = await getAdress(currentPositionResult?.coords.latitude, currentPositionResult?.coords.longitude)
+    if(!useQrScanner) {
+      currentPositionResult = await getCurrentPosition();
+      //call the adress api with the received coordinates
+      adressApiResult = await getAdress(currentPositionResult?.coords.latitude, currentPositionResult?.coords.longitude)
+    }
     //get a random ID
     const id = `attend-${(Math.random() * 100).toFixed()}`;
     //get the signature from the canvasdraw component using the 'useRef' hook in line 26
@@ -69,8 +73,9 @@ const AddAttendence: React.SFC<AddAttendenceProps> = () => {
       location: {
         lat: currentPositionResult?.coords.latitude,
         lon: currentPositionResult?.coords.longitude,
-        adress: adressApiResult.results[0].formatted
-      }
+        adress: adressApiResult?.results[0].formatted
+      },
+      scannedQRCode: qrScanSucces
     }
     //reset the form
     setQRScanSucess(false)
